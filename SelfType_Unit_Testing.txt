@@ -1,0 +1,90 @@
+************* SELF TYPE ***************************
+
+scala> trait T1{}
+defined trait T1
+
+scala> class A
+defined class A
+
+scala> new A with T1
+res22: A with T1 = $anon$1@363d8263
+
+scala> trait T1 {self: A => } // Now T1 could be used for A only.
+defined trait T1
+
+scala> new A with T1 
+res23: A with T1 = $anon$1@4c014e56
+
+scala> class B{}
+defined class B
+
+scala> new B with T1
+<console>:21: error: illegal inheritance;
+ self-type B with T1 does not conform to T1's selftype T1 with A
+              new B with T1
+                         ^
+
+scala>
+
+********** INNER CLASS ***************
+scala> class A { class B}
+defined class A
+
+scala> val a = new A
+a: A = A@5621a444
+
+scala> val b = new a.B
+b: a.B = A$B@57b67ac9
+
+scala>
+
+************************
+
+
+
+
+******* UNIT TESTING ****************
+
+scala> import org.scalatest._
+import org.scalatest._
+
+scala> {val a = 2; a}ensuring {_ % 2 == 0}
+res27: Int = 2
+
+scala> {val a = 2; a}ensuring {_ % 2 == 1}
+java.lang.AssertionError: assertion failed
+  at scala.Predef$.assert(Predef.scala:151)
+  at scala.Predef$Ensuring$.ensuring$extension2(Predef.scala:255)
+  ... 33 elided
+
+
+scala> import org.scalatest._
+import org.scalatest._
+
+scala> {val a = 2; a}ensuring {_ % 2 == 0}
+res27: Int = 2
+
+scala> {val a = 2; a}ensuring {_ % 2 == 1}
+java.lang.AssertionError: assertion failed
+  at scala.Predef$.assert(Predef.scala:151)
+  at scala.Predef$Ensuring$.ensuring$extension2(Predef.scala:255)
+  ... 33 elided
+
+scala> class A extends FunSuite {
+     | test("Dummy") {assert(2>3)}
+     | test("Dummy 1"){assert(2<3)}
+     | }
+defined class A
+
+scala> org.scalatest.run(new A)
+<-[32mA:<-[0m
+<-[31m- Dummy *** FAILED ***<-[0m
+<-[31m  org.scalatest.exceptions.TestFailedException was thrown. (<console>:24)<-[0m
+<-[32m- Dummy 1<-[0m
+
+
+
+Homework:
+
+scala> for ( e <- l1 if e > 10 ) yield(e)
+res2: List[Int] = List(11, 13, 15, 17, 19)
