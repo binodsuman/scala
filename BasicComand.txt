@@ -1,0 +1,218 @@
+scala> val l1 = List(1,2,3,4,5,6,7,8)
+l1: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8)
+
+scala> l1.head
+res10: Int = 1
+
+head return one data and datatype would be element
+
+scala> l1.tail
+res11: List[Int] = List(2, 3, 4, 5, 6, 7, 8)
+
+tail return list of same l1 except first element.
+scala>
+
+
+String details:
+1. StringOps
+http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.StringOps
+2. 
+
+Q : Find the occurance of word in sentance:
+scala> val a = "I am OK OK OK OK OK"
+a: String = I am OK OK OK OK OK
+
+scala> val m = scala.collection.mutable.Map[String, Int]()
+m: scala.collection.mutable.Map[String,Int] = Map()
+
+scala> a.split(" ").foreach(x =>  if(m.contains(x)) m(x) +=1 else m(x) = 1 )
+
+scala> m
+res53: scala.collection.mutable.Map[String,Int] = Map(am -> 1, I -> 1, OK -> 5)
+
+scala>
+
+Q: Two list are given then take first element from first list check divisable by 2 then take element from second list and check by divisiable by 3 then show element.
+
+scala> val b = Range(1,10).toList
+b: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+scala> val a = Range(1,10).toList
+a: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+scala> for( e <- a if e % 2 == 0; e1 <- b if e1 % 3 == 0 ) yield(e,e1)
+res49: List[(Int, Int)] = List((2,3), (2,6), (2,9), (4,3), (4,6), (4,9), (6,3), (6,6), (6,9), (8,3), (8,6), (8,9))
+
+scala> a.filter(e => e % 2 == 0).map( e => b.filter (e1 => e1 % 3 == 0).map(e1 => (e,e1)))
+res50: List[List[(Int, Int)]] = List(List((2,3), (2,6), (2,9)), List((4,3), (4,6), (4,9)), List((6,3), (6,6), (6,9)), List((8,3), (8,6), (8,9)))
+
+scala> a.filter(e => e % 2 == 0).flatMap( e => b.filter (e1 => e1 % 3 == 0).map(e1 => (e,e1)))
+res51: List[(Int, Int)] = List((2,3), (2,6), (2,9), (4,3), (4,6), (4,9), (6,3), (6,6), (6,9), (8,3), (8,6), (8,9))
+
+scala>
+
+scala> def sum(x : List[Int]) = { var result = 0; for(e<-x) result += e.toInt; result}
+sum: (x: List[Int])Int
+
+scala> val a = List(1,2,3,4,5)
+a: List[Int] = List(1, 2, 3, 4, 5)
+
+scala> sum(a)
+res8: Int = 15
+
+scala> def sum1(x:List[Int]) = x.reduce(_ + _)
+sum1: (x: List[Int])Int
+
+scala> sum1(a)
+res9: Int = 15
+
+RECURSSIVE METHOD
+scala> def sum_r (x : List[Int]) : Int = {x match {case Nil => 0; case head :: tail => head + sum_r(tail)}}
+sum_r: (x: List[Int])Int
+
+scala> sum_r(a)
+res10: Int = 15
+
+E:\ScalaMyCode
+create one scala file say Demo1.scala
+
+package recExample
+
+object Main extends App {
+  def sum_r (x : List[Int]) : Int = {
+           x match {
+		      case Nil => 0; 
+			  case head :: tail => head + sum_r(tail)
+			  }
+		  }
+	 val a = List(1,2,3,4,5)
+     println(sum_r(a))	 
+}
+
+save it.
+
+E:\ScalaMyCode>scalac Demo1.scala
+E:\ScalaMyCode>scala recExample.Main
+15  // Output
+
+
+
+E:\ScalaMyCode>scalac -Xprint:typer Demo1.scala
+scala>
+
+Class in Scala
+scala> new A
+res1: A = A@77ea58f9
+
+scala> class A{
+     | def ok(x:Int) = println(x)
+     | }
+defined class A
+
+scala> val a = new A
+a: A = A@2997cee7
+
+scala> a.ok(2)
+2
+
+scala> class A(x:Int){
+     | def ok(x:Int) = println(x * A.this.x)
+     | }
+defined class A
+
+scala> (new A(2)).ok(3)
+6
+
+
+scala> new A
+res1: A = A@77ea58f9
+
+scala> class A{
+     | def ok(x:Int) = println(x)
+     | }
+defined class A
+
+scala> val a = new A
+a: A = A@2997cee7
+
+scala> a.ok(2)
+2
+
+scala> class A(x:Int){
+     | def ok(x:Int) = println(x * A.this.x)
+     | }
+defined class A
+
+scala> (new A(2)).ok(3)
+6
+
+scala> class A(x:Int)(y:Int){
+     | def ok(x:Int) = print(x*A.this.x * this.y)
+     | }
+defined class A
+
+scala> (new A(2)(3)).ok(8)
+48
+scala> (new A(2,3)).ok(8)
+<console>:9: error: too many arguments for constructor A: (x: Int)(y: Int)A
+              (new A(2,3)).ok(8)
+               ^
+
+scala>
+
+scala> import scala.reflect.runtime.universe._
+import scala.reflect.runtime.universe._
+
+scala> typeOf[A].baseClasses
+res6: List[reflect.runtime.universe.Symbol] = List(class A, class Object, class Any)
+
+scala>
+
+
+scala> class A(x:Int){
+     | def ok(x:Int) = println(x)
+     | }
+defined class A
+
+scala> val a = new A(2)
+a: A = A@4adfb8cc
+
+scala> a.x  = 10
+<console>:15: error: value x is not a member of A
+val $ires3 = a.x
+               ^
+<console>:12: error: value x is not a member of A
+       a.x  = 10
+         ^
+
+scala> class A(val x:Int){
+     | def ok(x:Int) = println(x)
+     | }
+defined class A
+
+scala> val a = new A(2)
+a: A = A@2230658c
+
+scala> a.x  = 10
+<console>:12: error: reassignment to val
+       a.x  = 10
+            ^
+
+scala> a.x
+res10: Int = 2
+
+scala> class A(var x:Int){
+     | def ok(x:Int) = println(x)
+     | }
+defined class A
+
+scala> val a = new A(2)
+a: A = A@701fec75
+
+scala> a.x  = 10
+a.x: Int = 10
+
+scala> a.x
+res11: Int = 10
+
+scala>
