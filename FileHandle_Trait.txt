@@ -1,0 +1,129 @@
+**************** FILE HANDLING ********************
+import scala.io.Source
+
+object Test {
+   def main(args: Array[String]) {
+    
+      var data = Source.fromFile("myfile.txt" ).getLines
+	  for(s <- data){
+	    println(s)
+	  }
+   }
+}
+
+********** TRAIT ******************
+Case class 
+
+scala> class Base { val a = 0; var b:Int = _ ; def ok = 1}
+defined class Base
+
+scala> class B extends Base {override val a = 1; override def ok = 3}
+defined class B
+
+scala> var bbb = new B()
+bbb: B = B@4d0e75f2
+
+
+
+scala> bbb.a
+res2: Int = 1
+
+scala> bbb.ok
+res3: Int = 3
+
+scala>
+
+
+scala> class B extends Base {override val a = 1; override def ok = 3; def ok(s:String) = "Binod"}
+defined class B
+
+scala> (new B).ok
+res4: Int = 3
+
+scala> (new B).ok("x")
+res5: String = Binod
+
+scala> class B extends Base {override val a = 1; override def ok = 3; def ok(s:String) = s}
+defined class B
+
+scala> (new B).ok("x")
+res6: String = x
+
+********* Abstract class, funtion without body **************
+
+scala> class A {def ok}
+<console>:10: error: class A needs to be abstract, since method ok is not defined
+       class A {def ok}
+             ^
+
+scala> abstract class A{def ok}
+defined class A
+warning: previously defined object A is not a companion to class A.
+Companions must be defined together; you may wish to use :paste mode for this.
+
+scala> val aa = new A
+<console>:11: error: class A is abstract; cannot be instantiated
+       val aa = new A
+                ^
+
+scala> class B extends A {}
+<console>:11: error: class B needs to be abstract, since method ok in class A of type => Uni
+       class B extends A {}
+             ^
+
+scala> class B extends A {def ok {println(1)}}
+defined class B
+
+
+*********** TRAITS IS INTERFACE IN SCALA ******************
+
+scala> trait T1{}
+defined trait T1
+
+scala> new T1
+<console>:12: error: trait T1 is abstract; cannot be instantiated
+              new T1
+              ^
+
+scala> class B extends T1
+defined class B
+
+scala> trait T2 {}
+defined trait T2
+
+scala> class B extends T1 with T2
+defined class B
+
+Here in Trait, we can define function also unlike java.
+We can add more than one traits and can be achevied multiple inheritance.
+
+scala> class B extends T1 with T2 {def ok = 1; def ok1 = 2}
+defined class B
+
+scala> import scala.reflect.runtime.universe._
+import scala.reflect.runtime.universe._
+
+scala> typeOf[B].baseClasses
+res8: List[reflect.runtime.universe.Symbol] = List(class B, trait T2, trait T1, class Object, class Any)
+// It shows all base class extedened.
+
+
+We can pass annoymonus Type
+
+scala> trait T3[T]
+defined trait T3
+
+scala> class B extends T3
+<console>:14: error: trait T3 takes type parameters
+       class B extends T3
+                       ^
+
+scala> class B extends T3[Int]
+defined class B
+
+scala>
+
+scala>
+
+case class : Scala will generate many thing for this class.
+Normal class : You have to write your own.
