@@ -1,0 +1,151 @@
+************* ORDERS ******************
+Similar to Comparator in java
+
+
+scala>
+
+
+HOMEWORK
+scala> val l1 = (1 to (20,2)).toList
+l1: List[Int] = List(1, 3, 5, 7, 9, 11, 13, 15, 17, 19)
+
+
+
+scala> 0.1 + 0.1 + 0.1 - 0.3
+res3: Double = 5.551115123125783E-17
+WHY ?
+
+scala> 0.1 + 0.1  - 0.2
+res5: Double = 0.0
+
+scala> BigDecimal("0.1") + BigDecimal("0.1") + BigDecimal("0.1") - BigDecimal("0.3")
+res4: scala.math.BigDecimal = 0.0
+
+scala> 0.24 - 0.23
+res6: Double = 0.009999999999999981
+WHY?
+
+
+
+FUNCTION:
+ Annonoymous Function
+
+scala> (x:Int) => x + 1
+res8: Int => Int = <function1>
+
+scala> val a = (x:Int) => x + 1
+a: Int => Int = <function1>
+
+scala> a(1)
+res9: Int = 2
+
+scala>
+
+http://www.scala-lang.org/api/current/index.html#scala.Function$
+
+scala> val a = new Function1[Int, Int] {def apply(x:Int)=x+1}
+a: Int => Int = <function1>
+
+
+scala> val b = (x:Int) => x*3
+b: Int => Int = <function1>
+
+scala> val c = a andThen b
+c: Int => Int = <function1>
+
+scala> c(2)
+res12: Int = 9
+
+scala> val d = a compose b
+d: Int => Int = <function1>
+
+scala> d(2)
+res13: Int = 7
+
+scala>
+
+// andThen and compose only for annonymous function
+
+
+Return type will depends on the last sa
+
+scala> def square(x:Int) = {x * x}
+square: (x: Int)Int
+
+scala> def square(x:Int) = {x * x; 1.2}
+square: (x: Int)Double
+
+scala>
+
+CURRING FUNCTION
+scala> def mul(x:Int, n:Int) = {x * n}
+mul: (x: Int, n: Int)Int
+
+scala> val a = mul _
+a: (Int, Int) => Int = <function2>
+
+scala> a(2,3)
+res14: Int = 6
+
+scala> def mul(x:Int)(y:Int) = {x * y}
+mul: (x: Int)(y: Int)Int
+
+scala> val a = mul(2) _
+a: Int => Int = <function1>
+
+scala> a(5)
+res15: Int = 10
+
+scala>
+
+Implicit Function:
+work on Implicti variable
+
+scala> def mul(x:Int)(implicit n:Int) = x *  n
+mul: (x: Int)(implicit n: Int)Int
+
+scala> val value = 5
+value: Int = 5
+
+scala> mul(1)
+<console>:9: error: could not find implicit value for parameter n: Int
+              mul(1)
+                 ^
+
+scala> implicit val value = 5
+value: Int = 5
+
+scala> mul(1)
+res1: Int = 5
+
+scala> implicit val valueOne = 5
+valueOne: Int = 5
+
+scala> mul(1)
+<console>:11: error: ambiguous implicit values:
+ both value value of type => Int
+ and value valueOne of type => Int
+ match expected type Int
+              mul(1)
+                 ^
+
+WHY Now we have two implictit variable.
+
+
+
+scala> def sqr[T : Numeric](x:T) =  implicitly[Numeric[T]].plus(x,x)
+sqr: [T](x: T)(implicit evidence$1: Numeric[T])T
+
+scala> sqr(5)
+res6: Int = 10
+
+scala> def sqr[T : Numeric](x:T) =  implicitly[Numeric[T]].times(x,x)
+sqr: [T](x: T)(implicit evidence$1: Numeric[T])T
+
+scala> sqr(5)
+res7: Int = 25
+
+scala>
+
+
+scala>
