@@ -1,0 +1,175 @@
+*********** CONCURRENCY ***************
+Actor has two method 1. !  2. ?
+
+Future
+
+Agent
+
+scala> import scala.concurrent._
+import scala.concurrent._
+
+scala> import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
+
+scala> import akka.actor._
+import akka.actor._
+
+scala> val a = Future {Thread.sleep(5000);2}
+a: scala.concurrent.Future[Int] = scala.concurrent.impl.Promise$DefaultPromise@58c32da8
+
+scala> a.foreach(println)
+2
+
+scala> a.foreach(println(_))
+2
+
+scala> a.foreach(x => println(x))
+2
+
+scala> a foreach println
+2
+
+
+scala> class A extends Actor{
+     | def receive = { case "test" => println("got Test")
+     | case 2 => println(2)
+     | case anyvar => println("anyvar")
+     | }
+     | }
+defined class A
+
+scala> val sys = ActorSystem("mysys")
+sys: akka.actor.ActorSystem = akka://mysys
+
+scala> val a = sys.actorOf(Props[A],"A")
+a: akka.actor.ActorRef = Actor[akka://mysys/user/A#1384798635]
+
+scala> val a = sys.actorOf(Props[A],"MyActor")
+a: akka.actor.ActorRef = Actor[akka://mysys/user/MyActor#-673038861]
+
+
+scala> val b = sys.actorSelection("akka://mysys/user/A")
+b: akka.actor.ActorSelection = ActorSelection[Anchor(akka://mysys/), Path(/user/A)]
+
+scala> a ! "test"
+got Test
+
+scala> b ! "test"
+got Test
+
+scala> b ! "testaa"
+anyvar
+
+scala> b ! List(1,2,3,4)
+anyvar
+
+
+Concurrent Programming - Actor
+
+
+class A extends Actor {  
+def receive = { 
+	case "test" => println("From A - test")
+			 sender() ! "stop" 
+	case "stop" => println (" From A - stopped")
+			context.stop(self)
+	case _ =>
+	}
+}
+
+class B(val a:ActorRef) extends Actor {  
+
+def receive = { 
+	case "stop" => a ! "stop"
+			println ("From B- stopped")
+			context.stop(self)
+	case "doIt" => println("From B - Done")
+			 a ! "test"
+	case _  => 
+	}
+}
+
+
+
+val system = ActorSystem("mySystem")
+val a = system.actorOf(Props[A], "A") 
+
+val pp = Props(classOf[B], a)  
+val b = system.actorOf(pp, "B") 
+
+b ! "doIt"
+
+
+********************************
+
+scala> class A[+T] {}
+defined class A
+
+scala> val a:A[Any] = new A[AnyVal]
+a: A[Any] = A@15b20a13
+
+scala> val a:A[Any] = new A[AnyRef]
+a: A[Any] = A@3c9e85ed
+
+scala> val a:A[AnyRef] = new A[Any]
+<console>:18: error: type mismatch;
+ found   : A[Any]
+ required: A[AnyRef]
+       val a:A[AnyRef] = new A[Any]
+                         ^
+
+scala> class A[-T] {}
+defined class A
+
+scala> val a:A[AnyRef] = new A[Any]
+a: A[AnyRef] = A@301e4154
+
+scala>
+
+scala> val a = List(18,"OK")
+a: List[Any] = List(18, OK) // Here List is Any type
+
+scala> val a = List(18,10)
+a: List[Int] = List(18, 10)  // Here List is Int
+
+scala> "OKK" :: a
+res16: List[Any] = List(OKK, 18, 10)
+
+scala> "OKK" :: a
+res17: List[Any] = List(OKK, 18, 10)
+
+scala> "OKKPPP" :: a
+res18: List[Any] = List(OKKPPP, 18, 10) // Now changed to Any again after adding String
+
+
+scala> class A[T >:Int <:Any] () // Contruct agrument must be Greater or equal than Int and Less than or equal Any
+defined class A
+
+scala> new A[Char]
+<console>:18: error: type arguments [Char] do not conform to class A's type parameter bounds [T >: Int
+       val res19 =
+           ^
+<console>:19: error: type arguments [Char] do not conform to class A's type parameter bounds [T >: Int
+              new A[Char]
+                  ^
+
+scala> new A[Int]
+res20: A[Int] = A@7b5ebdb0
+
+scala> new A[List]
+<console>:19: error: type List takes type parameters
+              new A[List]
+
+
+
+scala> def m[T] (a: T, b: T) = a + b
+<console>:29: error: type mismatch;
+ found   : T
+ required: String
+       def m[T] (a: T, b: T) = a + b
+                                   ^
+
+scala> def m[T : Numeric] (a: T, b: T) = implicitly[Numeric[T]].plus(a,b)
+m: [T](a: T, b: T)(implicit evidence$1: Numeric[T])T
+
+
